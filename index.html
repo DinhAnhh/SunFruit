@@ -412,37 +412,48 @@
     <!-- end client section -->
 
     <!-- contact section -->
-    <section class="contact_section layout_padding">
-      <div class="container">
-        <h2 class="font-weight-bold">Liên hệ chúng tôi</h2>
-        <div class="row">
-          <div class="col-md-8 mr-auto">
-            <form action="">
-              <div class="contact_form-container">
+   
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <h2 class="font-weight-bold">Liên hệ chúng tôi</h2>
+      <div class="row">
+        <div class="col-md-8 mr-auto">
+          <form id="contactForm">
+            <div class="contact_form-container">
+              <div>
                 <div>
-                  <div>
-                    <input type="text" placeholder="Họ và tên" />
-                  </div>
-                  <div>
-                    <input type="text" placeholder="Số điện thoại" />
-                  </div>
-                  <div>
-                    <input type="email" placeholder="Email" />
-                  </div>
-
-                  <div class="mt-5">
-                    <input type="text" placeholder="Tên sản phẩm + số lượng" />
-                  </div>
-                  <div class="mt-5">
-                    <button type="submit">Gửi</button>
-                  </div>
+                  <input type="text" id="name" placeholder="Họ và tên" required />
+                </div>
+                <div>
+                  <input type="text" id="phone" placeholder="Số điện thoại" required />
+                </div>
+                <div>
+                  <input type="email" id="email" placeholder="Email" required />
+                </div>
+                <!-- Product selection dropdown -->
+                <div class="mt-5">
+                  <label for="product">Chọn sản phẩm:</label>
+                  <select id="product" required>
+                    <option value="" disabled selected>Chọn sản phẩm</option>
+                    <option value="Khóm sấy">Khóm sấy</option>
+                    <option value="Thanh long sấy">Thanh long sấy</option>
+                    <option value="Xoài sấy">Xoài sấy</option>
+                  </select>
+                </div>
+                <!-- Quantity input field -->
+                <div class="mt-5">
+                  <input type="number" id="quantity" placeholder="Số lượng" min="1" required />
+                </div>
+                <div class="mt-5">
+                  <button type="submit">Gửi</button>
                 </div>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
     <!-- end contact section -->
 
   
@@ -513,4 +524,38 @@
   
   
   </body>
+
+<script>
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect form data
+    var name = document.getElementById('name').value;
+    var phone = document.getElementById('phone').value;
+    var email = document.getElementById('email').value;
+    var product = document.getElementById('product').value;
+    var quantity = document.getElementById('quantity').value;
+
+    // Create the data string
+    var data = new URLSearchParams();
+    data.append('name', name);
+    data.append('phone', phone);
+    data.append('email', email);
+    data.append('product', product);
+    data.append('quantity', quantity);
+
+    // Send form data to Google Sheets or handle submission
+    fetch('https://script.google.com/macros/s/AKfycbyxDeIIxqHvcAerRFb2FFfmud2esGBZh9Cdyj9v8iWHFSAyCq06uo4PgcD8cUX6Y0l92g/exec', {
+      method: 'POST',
+      body: data
+    })
+    .then(response => response.text())
+    .then(result => {
+      alert('Form submitted successfully!');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
 </html>
