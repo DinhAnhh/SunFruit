@@ -344,10 +344,16 @@ a:focus {
   height: 100px;
   border-radius: 50%;
 }
-
+.slider_img-box1 img {
+  width: 80%;
+  height: auto;
+}
 /* Hiệu ứng hover */
 .team_member:hover {
   transform: translateY(-5px);
+}
+.fruit_section {
+  margin: 100px 0;
 }
 
 /* Mô tả thành viên */
