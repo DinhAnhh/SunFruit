@@ -346,6 +346,8 @@ a:focus {
 }
 .slider_img-box1 img {
   width: 80%;
+  position: relative;
+  left: 30px;
   height: auto;
 }
 /* Hiệu ứng hover */
