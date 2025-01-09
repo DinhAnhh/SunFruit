@@ -96,12 +96,14 @@
   </div>
 
 
+
+  <!-- contact section -->
   <section class="contact_section layout_padding" style="font-family: Arial, sans-serif;">
     <div class="container">
-      <h2 class="font-weight-bold" >Liên hệ chúng tôi</h2>
+      <h2 class="font-weight-bold">Liên hệ chúng tôi</h2>
       <div class="row">
         <div class="col-md-8 mr-auto">
-          <form id="contactForm"  ">
+          <form id="contactForm">
             <div class="contact_form-container">
               <div style="display: flex; flex-direction: column; gap: 20px;">
                 <div>
@@ -113,14 +115,18 @@
                 <div>
                   <input type="email" id="email" placeholder="Email" style="width: 100%; padding: 10px;" required />
                 </div>
+                <!-- Address field -->
+                <div>
+                  <input type="text" id="address"  name="address" placeholder="Địa chỉ" style="width: 100%; padding: 10px;" required />
+                </div>
                 <!-- Product selection dropdown -->
                 <div>
                   <label for="product">Chọn sản phẩm:</label>
                   <select id="product" style="width: 100%; padding: 10px;" required>
                     <option value="" disabled selected>Chọn sản phẩm</option>
-                    <option value="Khóm sấy" data-price="30000">Khóm sấy - 30k</option>
-                    <option value="Thanh long sấy" data-price="50000">Thanh long sấy - 50k</option>
-                    <option value="Xoài sấy" data-price="45000">Xoài sấy - 45k</option>
+                    <option value="Khóm sấy" data-price="89000">Khóm sấy - 89k</option>
+                    <option value="Thanh long sấy" data-price="50000">Thanh long sấy - 50k (đã hết hàng)</option>
+                    <option value="Xoài sấy" data-price="59000">Xoài sấy - 59k</option>
                   </select>
                 </div>
                 <!-- Quantity input field -->
@@ -134,7 +140,8 @@
                 </div>
                 <!-- Submit button -->
                 <div style="text-align: center;">
-                  <button type="submit" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Gửi</button>
+                  <button type="submit"
+                    style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Gửi</button>
                 </div>
               </div>
             </div>
@@ -144,7 +151,8 @@
     </div>
   </section>
   
-  <!-- end contact section -->
+
+
 
  
 
@@ -227,10 +235,10 @@
   }
 
   // Handle form submission
-  document.getElementById('contactForm').addEventListener('submit', function(e) {
+  document.getElementById('contactForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    
     // Collect form data
+    var address = document.getElementById('address').value;
     var name = document.getElementById('name').value;
     var phone = document.getElementById('phone').value;
     var email = document.getElementById('email').value;
@@ -242,26 +250,29 @@
     var data = new URLSearchParams();
     data.append('name', name);
     data.append('phone', phone);
+    data.append('address', address);
     data.append('email', email);
     data.append('product', product);
     data.append('quantity', quantity);
     data.append('totalPrice', totalPrice);
+    console.log([...data.entries()]); // In ra tất cả dữ liệu trước khi gửi
 
     // Send form data to Google Sheets via Apps Script API
-    fetch('https://script.google.com/macros/s/AKfycbx1UfBF1JHcoC0dNbB-sZojGOoAkg3W8M7anmnAd4hKf536VlGZxJ3kyKWvpIa0CPg7LA/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbw92LtNK1L4HmlNbN8ThXXDdbeA3LIA4w1Pqrqn4x7mJv7yW0rfVgOSalexPYtBZwN7zQ/exec', {
       method: 'POST',
       body: data
     })
-    .then(response => response.text())
-    .then(result => {
-      alert('Cảm ơn bạn đã mua hàng :>');
-      // Clear the form
-      document.getElementById('contactForm').reset();
-      document.getElementById('totalPrice').value = '';
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      .then(response => response.text())
+      .then(result => {
+        alert('Cảm ơn bạn đã mua hàng :>');
+        // Clear the form
+        document.getElementById('contactForm').reset();
+        document.getElementById('totalPrice').value = '';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   });
 </script>
+
 </html>
