@@ -1,0 +1,77 @@
+﻿@model FUSocial.DTO.NotificationDto
+
+<h2>Danh sách người dùng</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Tên người dùng</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td >@user.UserId</td>
+            <td>@user.FullName</td>
+            <td>
+                <button onclick="addFriend(@user.UserId)" type="button" class="btn btn-primary send-request-btn" data-user-id="@user.UserId" id="btn-@user.UserId">
+                    Gửi lời mời kết bạn
+                </button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/friendHub")
+        .build();
+    connection.start().then(() => {
+        console.log("Connected to SignalR hub");
+    }).catch(err => {
+        console.error("SignalR Connection Error: ", err);
+    });
+
+
+    connection.onclose(() => {
+        alert("Mất kết nối với máy chủ, vui lòng kiểm tra kết nối mạng.");
+    });
+    async function addFriend( userId) {
+        if (connection.state === signalR.HubConnectionState.Connected) {
+            try {
+                console.log("User ID: " + userId);
+
+                updateButtonState(userId, true);
+                await connection.invoke("SendFriendRequest", userId);
+                console.log("Lời mời đã được gửi thành công.");
+            } catch (err) {
+                alert("Có lỗi xảy ra khi gửi lời mời. Vui lòng thử lại.");
+                console.error("Lỗi khi gửi lời mời:", err);
+                console.error("Tên lỗi:", err.name);
+                console.error("Thông báo lỗi:", err.message);
+                console.error("Stack trace:", err.stack);
+                updateButtonState(userId, false);
+
+            }
+        } else {
+            alert("Chưa kết nối được tới máy chủ. Vui lòng kiểm tra kết nối.");
+        }
+    }
+    function updateButtonState(userId, isSuccess) {
+        const button = document.querySelector(`button[data-user-id='${userId}']`); // Giả sử bạn có thuộc tính data-user-id trên nút
+        if (isSuccess) {
+            button.innerText = "Đã gửi lời mời";
+            button.disabled = true;
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-success');
+        } else {
+            button.innerText = "Gửi lời mời";
+            button.disabled = false;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-primary');
+        }
+        }
+</script>

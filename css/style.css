@@ -138,6 +138,7 @@ a:focus {
 }
 
 .navbar-brand {
+  
   display: flex;
   align-items: center;
 }
