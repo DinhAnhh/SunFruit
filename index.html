@@ -374,7 +374,7 @@
                 </div>
                 <!-- Address field -->
                 <div>
-                  <input type="text" id="address" placeholder="Địa chỉ" style="width: 100%; padding: 10px;" required />
+                  <input type="text" id="address"  name="address" placeholder="Địa chỉ" style="width: 100%; padding: 10px;" required />
                 </div>
                 <!-- Product selection dropdown -->
                 <div>
@@ -493,7 +493,7 @@
   // Handle form submission
   document.getElementById('contactForm').addEventListener('submit', function (e) {
     e.preventDefault();
-
+    Logger.log(e.parameter);
     // Collect form data
     var address = document.getElementById('address').value;
     var name = document.getElementById('name').value;
@@ -507,20 +507,21 @@
     var data = new URLSearchParams();
     data.append('name', name);
     data.append('phone', phone);
+    data.append('address',address);
     data.append('email', email);
     data.append('product', product);
     data.append('quantity', quantity);
     data.append('totalPrice', totalPrice);
-    data.append('address',address);
 
     // Send form data to Google Sheets via Apps Script API
-    fetch('https://script.google.com/macros/s/AKfycbx1UfBF1JHcoC0dNbB-sZojGOoAkg3W8M7anmnAd4hKf536VlGZxJ3kyKWvpIa0CPg7LA/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbwm31xvlx_Jtga4f60SFNU1ue55osIWxnAynau8CP56UpO-XinU7YkbV8am0i96QxGTSg/exec', {
       method: 'POST',
       body: data
     })
       .then(response => response.text())
       .then(result => {
         alert('Cảm ơn bạn đã mua hàng :>');
+        console.log(address);
         // Clear the form
         document.getElementById('contactForm').reset();
         document.getElementById('totalPrice').value = '';
