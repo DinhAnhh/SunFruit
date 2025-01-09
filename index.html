@@ -507,21 +507,21 @@
     var data = new URLSearchParams();
     data.append('name', name);
     data.append('phone', phone);
-    data.append('address',address);
+    data.append('address', address);
     data.append('email', email);
     data.append('product', product);
     data.append('quantity', quantity);
     data.append('totalPrice', totalPrice);
+    console.log([...data.entries()]); // In ra tất cả dữ liệu trước khi gửi
 
     // Send form data to Google Sheets via Apps Script API
-    fetch('https://script.google.com/macros/s/AKfycbwm31xvlx_Jtga4f60SFNU1ue55osIWxnAynau8CP56UpO-XinU7YkbV8am0i96QxGTSg/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbw92LtNK1L4HmlNbN8ThXXDdbeA3LIA4w1Pqrqn4x7mJv7yW0rfVgOSalexPYtBZwN7zQ/exec', {
       method: 'POST',
       body: data
     })
       .then(response => response.text())
       .then(result => {
         alert('Cảm ơn bạn đã mua hàng :>');
-        console.log(address);
         // Clear the form
         document.getElementById('contactForm').reset();
         document.getElementById('totalPrice').value = '';
